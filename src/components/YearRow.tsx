@@ -1,16 +1,17 @@
 import React from "react";
 import "../styles/YearRow.css";
+import type { DayEntry } from "../lib/date";
 
 interface YearRowProps {
-  dates: string[];
+  dates: DayEntry[];
 }
 
 const YearRow: React.FC<YearRowProps> = ({ dates }) => {
   return (
     <div className="year-row">
-      {dates.map((date) => (
-        <div key={date} className="day-cell">
-          {new Date(date).getDate()}
+      {dates.map((entry, index) => (
+        <div key={index} className="day-cell">
+          {entry.date ? entry.date.getDate() : ''}
         </div>
       ))}
     </div>

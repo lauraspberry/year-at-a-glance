@@ -1,25 +1,21 @@
 import React from "react";
-import { generateYear } from "../lib/date";
+import { generate2WeekChunks } from "../lib/date";
 import YearRow from "./YearRow";
 
 const YearGrid: React.FC = () => {
-  const yearDays = generateYear(2025);
-
-  // Group days into chunks of 14 (2 weeks) so that each row is a horizontal row.
-  const rows: string[][] = [];
-  for (let i = 0; i < yearDays.length; i += 14) {
-    const chunk = yearDays.slice(i, i + 14);
-    if (chunk.length > 0) {
-      rows.push(chunk);
-    }
-  }
+  const rows = generate2WeekChunks(2025);
 
   return (
-    <div className="flex flex-col gap-1">
-      {rows.map((row, index) => (
-        <YearRow key={index} dates={row} />
-      ))}
-    </div>
+    <>
+      {/* <pre style={{ whiteSpace: 'pre-wrap', fontSize: '12px', padding: '10px', background: '#f5f5f5' }}>
+        {JSON.stringify(rows, null, 2)}
+      </pre> */}
+      <div className="flex flex-col gap-1">
+        {rows.map((row, index) => (
+          <YearRow key={index} dates={row} />
+        ))}
+      </div>
+    </>
   );
 };
 
