@@ -1,4 +1,5 @@
 import React from "react";
+import "../styles/YearRow.css";
 
 interface YearRowProps {
   dates: string[];
@@ -6,9 +7,9 @@ interface YearRowProps {
 
 const YearRow: React.FC<YearRowProps> = ({ dates }) => {
   return (
-    <div className="flex justify-start gap-1 bg-gray-100 p-2">
+    <div className="year-row">
       {dates.map((date) => (
-        <div key={date} className="border border-gray-300 p-1 text-center w-8 h-8">
+        <div key={date} className="day-cell">
           {new Date(date).getDate()}
         </div>
       ))}
