@@ -12,4 +12,20 @@
   text-align: center;
   width: 2rem;
   height: 2rem;
+}
+
+.month-cell {
+  width: 4rem;
+  padding: 0.25rem;
+  text-align: right;
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+.selected-date {
+  padding: 1rem;
+  background-color: #e5e7eb;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
 } 
