@@ -1,5 +1,6 @@
 import React from "react";
 import type { DayEntry } from "../lib/date";
+import { Text } from '@mantine/core';
 
 interface DayCellProps {
   entry: DayEntry;
@@ -8,13 +9,16 @@ interface DayCellProps {
 
 const DayCell: React.FC<DayCellProps> = ({ entry, onClick }) => {
   return (
-    <div 
-      className="day-cell" 
+    <Text 
+      className="day-cell"
       onClick={entry.date ? onClick : undefined}
-      style={{ cursor: entry.date ? 'pointer' : 'default' }}
+      style={{ 
+        cursor: entry.date ? 'pointer' : 'default',
+      }}
+      fw={700}
     >
       {entry.date ? entry.date.getDate() : ''}
-    </div>
+    </Text>
   );
 };
 

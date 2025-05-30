@@ -1,18 +1,19 @@
 import React from "react";
+import { Group, Text } from '@mantine/core';
 import "../styles/YearRow.css";
 
 const WeekdayHeader: React.FC = () => {
-  const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const weekdays = ['M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
   return (
-    <div className="year-row">
-      <div className="month-cell"></div>
+    <Group gap="xs">
+      <Text fw={500} w={64} ta="right" mr="xs"></Text>
       {weekdays.map((day, index) => (
-        <div key={index} className="day-cell">
+        <Text key={index} className="day-cell" fw={700}>
           {day}
-        </div>
+        </Text>
       ))}
-    </div>
+    </Group>
   );
 };
 

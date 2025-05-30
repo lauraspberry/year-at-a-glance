@@ -1,6 +1,6 @@
 import React from "react";
-import "../styles/YearRow.css";
 import type { DayEntry } from "../lib/date";
+import { Group, Text } from '@mantine/core';
 import DayCell from "./DayCell";
 
 interface YearRowProps {
@@ -11,8 +11,8 @@ interface YearRowProps {
 
 const YearRow: React.FC<YearRowProps> = ({ dates, monthName, onDayClick }) => {
   return (
-    <div className="year-row">
-      <div className="month-cell">{monthName || ''}</div>
+    <Group gap="xs">
+      <Text fw={500} w={64} ta="right" mr="xs">{monthName || ''}</Text>
       {dates.map((entry, index) => (
         <DayCell 
           key={index} 
@@ -20,7 +20,7 @@ const YearRow: React.FC<YearRowProps> = ({ dates, monthName, onDayClick }) => {
           onClick={entry.date ? () => onDayClick?.(entry.date!) : undefined}
         />
       ))}
-    </div>
+    </Group>
   );
 };
 

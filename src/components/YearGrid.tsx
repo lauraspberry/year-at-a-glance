@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { generate2WeekChunks } from "../lib/date";
+import { Stack, Text } from '@mantine/core';
 import YearRow from "./YearRow";
 import WeekdayHeader from "./WeekdayHeader";
 
@@ -8,7 +9,7 @@ const YearGrid: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
   const getMonthName = (date: Date) => {
-    return date.toLocaleString('default', { month: 'long' });
+    return date.toLocaleString('default', { month: 'short' });
   };
 
   const handleDayClick = (date: Date) => {
@@ -16,21 +17,18 @@ const YearGrid: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col gap-1">
+    <Stack gap="xs">
       {selectedDate && (
-        <div className="selected-date">
+        <Text size="lg" fw={500} bg="gray.1" p="md" style={{ borderRadius: '8px' }}>
           Selected: {selectedDate.toLocaleDateString(undefined, { 
             weekday: 'long',
             year: 'numeric',
             month: 'long',
             day: 'numeric'
           })}
-        </div>
+        </Text>
       )}
       <WeekdayHeader />
-      {/* <pre style={{ whiteSpace: 'pre-wrap', fontSize: '12px', padding: '10px', background: '#f5f5f5' }}>
-        {JSON.stringify(rows, null, 2)}
-      </pre> */}
       {rows.map((row, index) => {
         // Check if any date in the row is the first day of a month
         const firstDayOfMonth = row.find(entry => entry.date?.getDate() === 1)?.date;
@@ -45,7 +43,7 @@ const YearGrid: React.FC = () => {
           />
         );
       })}
-    </div>
+    </Stack>
   );
 };
 
