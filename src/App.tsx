@@ -2,7 +2,7 @@ import { MantineProvider, Title, Container, Grid, Stack, Group, Button, Text } f
 import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import YearGrid from "./components/YearGrid";
-import SupabaseTest from "./components/SupabaseTest";
+import EntryForm from "./components/EntryForm";
 import EntryList from "./components/EntryList";
 import AllEntries from "./components/AllEntries";
 import EntryDatesProvider from "./components/EntryDatesProvider";
@@ -43,7 +43,7 @@ function AppContent() {
         <Grid>
           <Grid.Col span={{ base: 12, md: 3 }}>
             <Stack>
-              <SupabaseTest selectedDate={selectedDate} />
+              <EntryForm selectedDate={selectedDate} />
               <EntryList selectedDate={selectedDate} />
               <AllEntries />
             </Stack>

@@ -1,52 +1,41 @@
-import { useState, useEffect } from 'react';
-import { Button, TextInput, Stack, Text, Paper } from '@mantine/core';
+import { useState } from 'react';
+import { Paper, TextInput, Button, Stack, Text } from '@mantine/core';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../lib/AuthContext';
 
-interface SupabaseTestProps {
+interface EntryFormProps {
   selectedDate: Date | null;
 }
 
-export default function SupabaseTest({ selectedDate }: SupabaseTestProps) {
+export default function EntryForm({ selectedDate }: EntryFormProps) {
   const [note, setNote] = useState('');
   const [tag, setTag] = useState('');
-  const [date, setDate] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
   const { user } = useAuth();
-
-  useEffect(() => {
-    if (selectedDate) {
-      setDate(selectedDate.toISOString().split('T')[0]);
-    }
-  }, [selectedDate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!user || !selectedDate) return;
+
     setLoading(true);
     setError(null);
-    setSuccess(null);
 
     try {
       const { error } = await supabase
         .from('entries')
         .insert([
           {
-            user_id: user?.id,
-            date: date,
-            note: note,
-            tag: tag
-          }
-        ])
-        .select()
+            user_id: user.id,
+            date: selectedDate.toISOString().split('T')[0],
+            note,
+            tag: tag || null,
+          },
+        ]);
 
       if (error) throw error;
-
-      setSuccess('Entry saved successfully!');
       setNote('');
       setTag('');
-      setDate('');
     } catch (err) {
       console.error('Error saving entry:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
@@ -59,16 +48,14 @@ export default function SupabaseTest({ selectedDate }: SupabaseTestProps) {
     <Paper p="md" withBorder>
       <form onSubmit={handleSubmit}>
         <Stack gap="md">
-          <Text size="lg" fw={500}>Add New Entry</Text>
+          <Text size="lg" fw={500}>Add Entry</Text>
           
           <TextInput
             label="Date"
-            placeholder="YYYY-MM-DD"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            required
+            value={selectedDate ? selectedDate.toLocaleDateString() : 'No date selected'}
+            disabled
           />
-          
+
           <TextInput
             label="Note"
             placeholder="Enter your note"
@@ -76,27 +63,25 @@ export default function SupabaseTest({ selectedDate }: SupabaseTestProps) {
             onChange={(e) => setNote(e.target.value)}
             required
           />
-          
+
           <TextInput
             label="Tag"
-            placeholder="Enter a tag"
+            placeholder="Optional tag"
             value={tag}
             onChange={(e) => setTag(e.target.value)}
           />
 
           {error && (
             <Text c="red" size="sm">
-              Error: {error}
+              {error}
             </Text>
           )}
 
-          {success && (
-            <Text c="green" size="sm">
-              {success}
-            </Text>
-          )}
-
-          <Button type="submit" loading={loading}>
+          <Button 
+            type="submit" 
+            loading={loading}
+            disabled={!selectedDate || !note.trim()}
+          >
             Save Entry
           </Button>
         </Stack>
