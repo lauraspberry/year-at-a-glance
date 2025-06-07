@@ -2,6 +2,7 @@ import { MantineProvider, Title, Container, Grid, Stack } from '@mantine/core';
 import { useState } from 'react';
 import YearGrid from "./components/YearGrid";
 import SelectedDateDisplay from "./components/SelectedDateDisplay";
+import SupabaseTest from "./components/SupabaseTest";
 import '@mantine/core/styles.css';
 
 export default function App() {
@@ -15,6 +16,7 @@ export default function App() {
             <Stack>
               <Title order={1} mb="xl">Year at a Glance – 2025</Title>
               <SelectedDateDisplay selectedDate={selectedDate} />
+              <SupabaseTest />
             </Stack>
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 9 }}>
