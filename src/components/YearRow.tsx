@@ -11,7 +11,7 @@ interface YearRowProps {
 
 const YearRow: React.FC<YearRowProps> = ({ dates, monthName, onDayClick }) => {
   return (
-    <Group gap="xs">
+    <Group gap="xs" style={{ flexWrap: 'nowrap' }}>
       <Text fw={500} w={64} ta="right" mr="xs">{monthName || ''}</Text>
       {dates.map((entry, index) => (
         <DayCell 
