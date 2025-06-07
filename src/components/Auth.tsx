@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { TextInput, PasswordInput, Button, Stack, Text, Group } from '@mantine/core'
+import { TextInput, PasswordInput, Button, Stack, Text, Group, Paper } from '@mantine/core'
 import { signIn, signUp, signOut } from '../../lib/auth'
 import { useAuth } from '../../lib/AuthContext'
 
@@ -9,13 +9,11 @@ const Auth: React.FC = () => {
   const [isSignUp, setIsSignUp] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
-  const [message, setMessage] = useState<string | null>(null)
   const { user } = useAuth()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
-    setMessage(null)
     setLoading(true)
 
     try {
@@ -26,13 +24,6 @@ const Auth: React.FC = () => {
       if (error) {
         console.error('Auth error:', error)
         throw error
-      }
-
-      if (isSignUp && data?.user && !data.session) {
-        setMessage('Please check your email for a confirmation link to complete your registration.')
-        setEmail('')
-        setPassword('')
-        setIsSignUp(false)
       }
 
       // If signup was successful, automatically sign in
@@ -48,12 +39,27 @@ const Auth: React.FC = () => {
     }
   }
 
+  const handleSignOut = async () => {
+    try {
+      const { error } = await signOut()
+      if (error) throw error
+    } catch (err) {
+      console.error('Sign out error:', err)
+      setError(err instanceof Error ? err.message : 'Error signing out')
+    }
+  }
+
   if (user) {
     return (
-      <Stack align="center" gap="md">
-        <Text>Welcome, {user.email}</Text>
-        <Button onClick={() => signOut()}>Sign Out</Button>
-      </Stack>
+      <Paper p="md" withBorder>
+        <Stack align="center" gap="md">
+          <Text size="lg" fw={500}>Welcome, {user.email}</Text>
+          <Text size="sm" c="dimmed">User ID: {user.id}</Text>
+          <Button onClick={handleSignOut} variant="light" color="red">
+            Sign Out
+          </Button>
+        </Stack>
+      </Paper>
     )
   }
 
@@ -77,11 +83,6 @@ const Auth: React.FC = () => {
         {error && (
           <Text color="red" size="sm">
             Error: {error}
-          </Text>
-        )}
-        {message && (
-          <Text color="green" size="sm">
-            {message}
           </Text>
         )}
         <Group justify="space-between">
