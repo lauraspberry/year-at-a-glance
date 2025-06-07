@@ -1,9 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button, TextInput, Stack, Text, Paper } from '@mantine/core';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../lib/AuthContext';
 
-export default function SupabaseTest() {
+interface SupabaseTestProps {
+  selectedDate: Date | null;
+}
+
+export default function SupabaseTest({ selectedDate }: SupabaseTestProps) {
   const [note, setNote] = useState('');
   const [tag, setTag] = useState('');
   const [date, setDate] = useState('');
@@ -11,6 +15,12 @@ export default function SupabaseTest() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const { user } = useAuth();
+
+  useEffect(() => {
+    if (selectedDate) {
+      setDate(selectedDate.toISOString().split('T')[0]);
+    }
+  }, [selectedDate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -42,7 +42,7 @@ function AppContent() {
           <Grid.Col span={{ base: 12, md: 3 }}>
             <Stack>
               <SelectedDateDisplay selectedDate={selectedDate} />
-              <SupabaseTest />
+              <SupabaseTest selectedDate={selectedDate} />
             </Stack>
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 9 }}>

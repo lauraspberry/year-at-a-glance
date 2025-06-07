@@ -12,9 +12,9 @@ const SelectedDateDisplay: React.FC<SelectedDateDisplayProps> = ({ selectedDate 
     <Paper p="md" bg="gray.0" radius="md">
       <Text size="lg" fw={500}>
         Selected: {selectedDate.toLocaleDateString(undefined, {
-          weekday: 'long',
+          weekday: 'short',
           year: 'numeric',
-          month: 'long',
+          month: 'short',
           day: 'numeric'
         })}
       </Text>
