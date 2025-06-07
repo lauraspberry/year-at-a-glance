@@ -18,7 +18,7 @@ export default function App() {
             </Stack>
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 9 }}>
-            <YearGrid onDateSelect={setSelectedDate} />
+            <YearGrid onDateSelect={setSelectedDate} selectedDate={selectedDate} />
           </Grid.Col>
         </Grid>
       </Container>
