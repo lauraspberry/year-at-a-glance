@@ -7,9 +7,10 @@ import WeekdayHeader from "./WeekdayHeader";
 interface YearGridProps {
   onDateSelect: (date: Date) => void;
   selectedDate: Date | null;
+  datesWithEntries: Set<string>;
 }
 
-const YearGrid: React.FC<YearGridProps> = ({ onDateSelect, selectedDate }) => {
+const YearGrid: React.FC<YearGridProps> = ({ onDateSelect, selectedDate, datesWithEntries }) => {
   const rows = generate2WeekChunks(2025);
 
   const getMonthName = (date: Date) => {
@@ -36,6 +37,7 @@ const YearGrid: React.FC<YearGridProps> = ({ onDateSelect, selectedDate }) => {
             monthName={monthName}
             onDayClick={onDateSelect}
             selectedDate={selectedDate}
+            datesWithEntries={datesWithEntries}
           />
         );
       })}

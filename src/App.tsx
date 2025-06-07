@@ -6,6 +6,7 @@ import SelectedDateDisplay from "./components/SelectedDateDisplay";
 import SupabaseTest from "./components/SupabaseTest";
 import EntryList from "./components/EntryList";
 import AllEntries from "./components/AllEntries";
+import EntryDatesProvider from "./components/EntryDatesProvider";
 import '@mantine/core/styles.css';
 import { AuthProvider, useAuth } from '../lib/AuthContext'
 import Auth from './components/Auth'
@@ -50,7 +51,15 @@ function AppContent() {
             </Stack>
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 9 }}>
-            <YearGrid onDateSelect={setSelectedDate} selectedDate={selectedDate} />
+            <EntryDatesProvider>
+              {(datesWithEntries) => (
+                <YearGrid 
+                  onDateSelect={setSelectedDate} 
+                  selectedDate={selectedDate}
+                  datesWithEntries={datesWithEntries}
+                />
+              )}
+            </EntryDatesProvider>
           </Grid.Col>
         </Grid>
       </Stack>

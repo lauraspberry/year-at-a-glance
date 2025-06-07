@@ -1,30 +1,26 @@
 import React from "react";
-import { Group, Text, Box } from '@mantine/core';
-import "../styles/YearRow.css";
+import { Group, Text, Paper } from '@mantine/core';
 
 const WeekdayHeader: React.FC = () => {
   const weekdays = ['M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
   return (
-    <Group gap="xs" style={{ flexWrap: 'nowrap' }}>
-      <Text fw={500} w={64} ta="right" mr="xs"></Text>
+    <Group gap="xs" wrap="nowrap">
+      <div style={{ width: 40 }} />
       {weekdays.map((day, index) => (
-        <Box
+        <Paper
           key={index}
+          p="xs"
           style={{
-            width: '3rem',
-            height: '3rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: 'var(--mantine-color-gray-7)',
-            borderRadius: '4px',
+            flex: 1,
+            minWidth: 40,
+            textAlign: 'center',
           }}
         >
-          <Text fw={700} size="lg" c="white">
+          <Text size="sm" c="dimmed">
             {day}
           </Text>
-        </Box>
+        </Paper>
       ))}
     </Group>
   );
