@@ -1,34 +1,45 @@
 import React from "react";
+import { Paper, Text } from '@mantine/core';
 import type { DayEntry } from "../lib/date";
-import { Text, Box } from '@mantine/core';
 
 interface DayCellProps {
   entry: DayEntry;
-  onClick?: () => void;
-  selected?: boolean;
+  isSelected: boolean;
+  hasEntry: boolean;
+  onClick: (date: Date) => void;
 }
 
-const DayCell: React.FC<DayCellProps> = ({ entry, onClick, selected }) => {
+const DayCell: React.FC<DayCellProps> = ({ entry, isSelected, hasEntry, onClick }) => {
   return (
-    <Box
-      className="day-cell"
-      onClick={entry.date ? onClick : undefined}
-      style={{ 
+    <Paper
+      p="xs"
+      style={{
+        flex: 1,
+        minWidth: 40,
+        textAlign: 'center',
         cursor: entry.date ? 'pointer' : 'default',
-        backgroundColor: selected ? 'var(--mantine-color-blue-4)' : 'var(--mantine-color-gray-1)',
-        borderRadius: '4px',
-        transition: 'background-color 0.2s ease',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '3rem',
-        height: '3rem',
+        backgroundColor: isSelected ? 'var(--mantine-color-blue-1)' : 'transparent',
+        position: 'relative',
       }}
+      onClick={() => entry.date && onClick(entry.date)}
     >
-      <Text fw={700} size="lg">
+      {hasEntry && (
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '3px',
+            backgroundColor: 'var(--mantine-color-blue-5)',
+            borderRadius: '2px 2px 0 0',
+          }}
+        />
+      )}
+      <Text size="sm" c={entry.date ? undefined : 'dimmed'}>
         {entry.date ? entry.date.getDate() : ''}
       </Text>
-    </Box>
+    </Paper>
   );
 };
 
