@@ -1,5 +1,5 @@
 import React from "react";
-import { Group, Text } from '@mantine/core';
+import { Group, Text, Box } from '@mantine/core';
 import "../styles/YearRow.css";
 
 const WeekdayHeader: React.FC = () => {
@@ -9,9 +9,22 @@ const WeekdayHeader: React.FC = () => {
     <Group gap="xs" style={{ flexWrap: 'nowrap' }}>
       <Text fw={500} w={64} ta="right" mr="xs"></Text>
       {weekdays.map((day, index) => (
-        <Text key={index} className="day-cell" fw={700}>
-          {day}
-        </Text>
+        <Box
+          key={index}
+          style={{
+            width: '3rem',
+            height: '3rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: 'var(--mantine-color-gray-7)',
+            borderRadius: '4px',
+          }}
+        >
+          <Text fw={700} size="lg" c="white">
+            {day}
+          </Text>
+        </Box>
       ))}
     </Group>
   );
