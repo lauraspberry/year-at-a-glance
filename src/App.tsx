@@ -4,6 +4,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import YearGrid from "./components/YearGrid";
 import SelectedDateDisplay from "./components/SelectedDateDisplay";
 import SupabaseTest from "./components/SupabaseTest";
+import EntryList from "./components/EntryList";
+import AllEntries from "./components/AllEntries";
 import '@mantine/core/styles.css';
 import { AuthProvider, useAuth } from '../lib/AuthContext'
 import Auth from './components/Auth'
@@ -43,6 +45,8 @@ function AppContent() {
             <Stack>
               <SelectedDateDisplay selectedDate={selectedDate} />
               <SupabaseTest selectedDate={selectedDate} />
+              <EntryList selectedDate={selectedDate} />
+              <AllEntries />
             </Stack>
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 9 }}>
