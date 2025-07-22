@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { TextInput, PasswordInput, Button, Stack, Text, Group, Paper } from '@mantine/core'
 import { signIn, signUp, signOut } from '../../lib/auth'
 import { useAuth } from '../../lib/AuthContext'
+import { GoogleLogin } from '@react-oauth/google';
 
 const Auth: React.FC = () => {
   const [email, setEmail] = useState('')
@@ -93,6 +94,18 @@ const Auth: React.FC = () => {
             {isSignUp ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
           </Button>
         </Group>
+        <div style={{ textAlign: 'center', marginTop: 16 }}>
+          <GoogleLogin
+            onSuccess={credentialResponse => {
+              // For now, just log the response. Next step: use this to fetch calendar events.
+              console.log('Google credential response:', credentialResponse);
+            }}
+            onError={() => {
+              console.log('Google Login Failed');
+            }}
+            // scope="https://www.googleapis.com/auth/calendar.readonly"
+          />
+        </div>
       </Stack>
     </form>
   )
