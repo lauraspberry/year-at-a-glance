@@ -1,5 +1,5 @@
 import { MantineProvider, Title, Container, Grid, Stack, Group, Button, Text, Modal, Paper } from '@mantine/core';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import YearGrid from "./components/YearGrid";
 import EntryList from "./components/EntryList";
@@ -12,11 +12,54 @@ import AuthCallback from './components/AuthCallback'
 import { signOut } from '../lib/auth'
 import EntryForm from "./components/EntryForm";
 import React from 'react';
+import axios from 'axios';
+import { supabase } from '../lib/supabase';
+
+type GoogleCalendarEvent = {
+  id: string;
+  summary?: string;
+  start?: { dateTime?: string; date?: string };
+};
+
+function useGoogleCalendarEvents() {
+  const [events, setEvents] = useState<GoogleCalendarEvent[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      const { data } = await supabase.auth.getSession();
+      const accessToken = data.session?.provider_token;
+      if (!accessToken) return;
+
+      try {
+        const res = await axios.get(
+          'https://www.googleapis.com/calendar/v3/calendars/primary/events',
+          {
+            headers: { Authorization: `Bearer ${accessToken}` },
+            params: {
+              maxResults: 10,
+              orderBy: 'startTime',
+              singleEvents: true,
+              timeMin: new Date().toISOString(),
+            },
+          }
+        );
+        setEvents(res.data.items);
+      } catch {
+        setError('Failed to fetch events');
+      }
+    };
+    fetchEvents();
+  }, []);
+
+  return { events, error };
+}
 
 function AppContent() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const { user } = useAuth();
   const [modalOpen, setModalOpen] = useState(false);
+  const { events: googleEvents, error: googleEventsError } = useGoogleCalendarEvents();
 
   // Open modal when selectedDate is set and modalOpen is true
   React.useEffect(() => {
@@ -68,11 +111,22 @@ function AppContent() {
             <Stack>
               <EntryList selectedDate={selectedDate} />
               <AllEntries />
-              {(
-                <Paper p="md" withBorder>
-                  <Text fw={500} mb="sm">Google Calendar Events</Text>
-                </Paper>
-              )}
+              <Paper p="md" withBorder>
+                <Text fw={500} mb="sm">Google Calendar Events</Text>
+                {googleEventsError && <Text color="red">{googleEventsError}</Text>}
+                {googleEvents.length === 0 ? (
+                  <Text size="sm" c="dimmed">No upcoming events</Text>
+                ) : (
+                  <Stack gap="xs">
+                    {googleEvents.map(event => (
+                      <Paper key={event.id} p="xs" withBorder>
+                        <Text size="sm">{event.summary || '(No Title)'}</Text>
+                        <Text size="xs" c="dimmed">{event.start?.dateTime || event.start?.date}</Text>
+                      </Paper>
+                    ))}
+                  </Stack>
+                )}
+              </Paper>
             </Stack>
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 9 }}>
