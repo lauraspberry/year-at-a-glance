@@ -10,6 +10,15 @@ interface DayCellProps {
 }
 
 const DayCell: React.FC<DayCellProps> = ({ entry, isSelected, hasEntry, onClick }) => {
+  const [isHovered, setIsHovered] = React.useState(false);
+
+  let backgroundColor = 'transparent';
+  if (isSelected) {
+    backgroundColor = 'var(--mantine-color-blue-1)';
+  } else if (isHovered) {
+    backgroundColor = '#f1f3f5';
+  }
+
   return (
     <Paper
       p="xs"
@@ -18,10 +27,12 @@ const DayCell: React.FC<DayCellProps> = ({ entry, isSelected, hasEntry, onClick 
         minWidth: 40,
         textAlign: 'center',
         cursor: entry.date ? 'pointer' : 'default',
-        backgroundColor: isSelected ? 'var(--mantine-color-blue-1)' : 'transparent',
+        backgroundColor,
         position: 'relative',
       }}
       onClick={() => entry.date && onClick(entry.date)}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       {hasEntry && (
         <div
