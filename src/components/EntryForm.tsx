@@ -5,9 +5,10 @@ import { useAuth } from '../../lib/AuthContext';
 
 interface EntryFormProps {
   selectedDate: Date | null;
+  onSuccess?: () => void;
 }
 
-export default function EntryForm({ selectedDate }: EntryFormProps) {
+export default function EntryForm({ selectedDate, onSuccess }: EntryFormProps) {
   const [note, setNote] = useState('');
   const [tag, setTag] = useState('');
   const [loading, setLoading] = useState(false);
@@ -36,6 +37,7 @@ export default function EntryForm({ selectedDate }: EntryFormProps) {
       if (error) throw error;
       setNote('');
       setTag('');
+      if (onSuccess) onSuccess();
     } catch (err) {
       console.error('Error saving entry:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');

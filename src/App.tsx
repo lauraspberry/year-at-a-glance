@@ -72,7 +72,7 @@ function AppContent() {
           </Grid.Col>
         </Grid>
         <Modal opened={modalOpen} onClose={handleModalClose} title={selectedDate ? `Add Entry for ${selectedDate.toLocaleDateString()}` : ''}>
-          <EntryForm selectedDate={selectedDate} />
+          <EntryForm selectedDate={selectedDate} onSuccess={handleModalClose} />
         </Modal>
       </Stack>
     </Container>
