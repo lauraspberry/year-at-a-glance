@@ -1,9 +1,9 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { TextInput, PasswordInput, Button, Stack, Text, Group, Paper } from '@mantine/core'
 import { signIn, signUp, signOut } from '../../lib/auth'
 import { useAuth } from '../../lib/AuthContext'
-import { useGoogleAuth } from '../lib/GoogleAuthContext';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../../lib/supabase';
 
 const Auth: React.FC = () => {
   const [email, setEmail] = useState('')
@@ -12,14 +12,13 @@ const Auth: React.FC = () => {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const { user } = useAuth()
-  const { isGoogleSignedIn, loginWithGoogle, googleError } = useGoogleAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isGoogleSignedIn) {
-      navigate('/home');
+    if (user) {
+      navigate('/');
     }
-  }, [isGoogleSignedIn, navigate]);
+  }, [user, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -58,6 +57,19 @@ const Auth: React.FC = () => {
       setError(err instanceof Error ? err.message : 'Error signing out')
     }
   }
+
+  const handleGoogleSignIn = async () => {
+    try {
+      await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: window.location.origin + '/',
+        },
+      });
+    } catch {
+      setError('Google sign-in failed');
+    }
+  };
 
   if (user) {
     return (
@@ -104,12 +116,9 @@ const Auth: React.FC = () => {
           </Button>
         </Group>
         <div style={{ textAlign: 'center', marginTop: 16 }}>
-          {!isGoogleSignedIn && (
-            <Button onClick={loginWithGoogle} color="blue" variant="outline">
-              Sign in with Google
-            </Button>
-          )}
-          {googleError && <Text color="red">{googleError}</Text>}
+          <Button onClick={handleGoogleSignIn} color="blue" variant="outline">
+            Sign in with Google
+          </Button>
         </div>
       </Stack>
     </form>

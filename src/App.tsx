@@ -1,4 +1,4 @@
-import { MantineProvider, Title, Container, Grid, Stack, Group, Button, Text, Modal } from '@mantine/core';
+import { MantineProvider, Title, Container, Grid, Stack, Group, Button, Text, Modal, Paper } from '@mantine/core';
 import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import YearGrid from "./components/YearGrid";
@@ -12,7 +12,6 @@ import AuthCallback from './components/AuthCallback'
 import { signOut } from '../lib/auth'
 import EntryForm from "./components/EntryForm";
 import React from 'react';
-import HomePage from './components/HomePage';
 
 function AppContent() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -69,6 +68,11 @@ function AppContent() {
             <Stack>
               <EntryList selectedDate={selectedDate} />
               <AllEntries />
+              {(
+                <Paper p="md" withBorder>
+                  <Text fw={500} mb="sm">Google Calendar Events</Text>
+                </Paper>
+              )}
             </Stack>
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 9 }}>
@@ -98,7 +102,7 @@ export default function App() {
         <MantineProvider>
           <Routes>
             <Route path="/auth/callback" element={<AuthCallback />} />
-            <Route path="/home" element={<HomePage />} />
+            {/* <Route path="/home" element={<HomePage />} /> */}
             <Route path="*" element={<AppContent />} />
           </Routes>
         </MantineProvider>
