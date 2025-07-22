@@ -18,9 +18,11 @@ function AppContent() {
   const { user } = useAuth();
   const [modalOpen, setModalOpen] = useState(false);
 
-  // Open modal when selectedDate is set
+  // Open modal when selectedDate is set and modalOpen is true
   React.useEffect(() => {
-    setModalOpen(!!selectedDate);
+    if (!selectedDate) {
+      setModalOpen(false);
+    }
   }, [selectedDate]);
 
   if (!user) {
@@ -38,6 +40,15 @@ function AppContent() {
   const handleModalClose = () => {
     setModalOpen(false);
     setSelectedDate(null);
+  };
+
+  // Custom onDateSelect: open modal only if clicking already selected date
+  const handleDateSelect = (date: Date) => {
+    if (selectedDate && date.toDateString() === selectedDate.toDateString()) {
+      setModalOpen(true);
+    } else {
+      setSelectedDate(date);
+    }
   };
 
   return (
@@ -63,7 +74,7 @@ function AppContent() {
             <EntryDatesProvider>
               {(datesWithEntries) => (
                 <YearGrid 
-                  onDateSelect={setSelectedDate} 
+                  onDateSelect={handleDateSelect} 
                   selectedDate={selectedDate}
                   datesWithEntries={datesWithEntries}
                 />
