@@ -1,8 +1,7 @@
-import { MantineProvider, Title, Container, Grid, Stack, Group, Button, Text } from '@mantine/core';
+import { MantineProvider, Title, Container, Grid, Stack, Group, Button, Text, Modal } from '@mantine/core';
 import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import YearGrid from "./components/YearGrid";
-import EntryForm from "./components/EntryForm";
 import EntryList from "./components/EntryList";
 import AllEntries from "./components/AllEntries";
 import EntryDatesProvider from "./components/EntryDatesProvider";
@@ -11,10 +10,18 @@ import { AuthProvider, useAuth } from '../lib/AuthContext'
 import Auth from './components/Auth'
 import AuthCallback from './components/AuthCallback'
 import { signOut } from '../lib/auth'
+import EntryForm from "./components/EntryForm";
+import React from 'react';
 
 function AppContent() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const { user } = useAuth();
+  const [modalOpen, setModalOpen] = useState(false);
+
+  // Open modal when selectedDate is set
+  React.useEffect(() => {
+    setModalOpen(!!selectedDate);
+  }, [selectedDate]);
 
   if (!user) {
     return <Auth />;
@@ -27,6 +34,11 @@ function AppContent() {
       console.error('Sign out error:', err)
     }
   }
+
+  const handleModalClose = () => {
+    setModalOpen(false);
+    setSelectedDate(null);
+  };
 
   return (
     <Container size="xl" py="xl" style={{ minWidth: '100%' }}>
@@ -43,7 +55,6 @@ function AppContent() {
         <Grid>
           <Grid.Col span={{ base: 12, md: 3 }}>
             <Stack>
-              <EntryForm selectedDate={selectedDate} />
               <EntryList selectedDate={selectedDate} />
               <AllEntries />
             </Stack>
@@ -60,6 +71,9 @@ function AppContent() {
             </EntryDatesProvider>
           </Grid.Col>
         </Grid>
+        <Modal opened={modalOpen} onClose={handleModalClose} title={selectedDate ? `Add Entry for ${selectedDate.toLocaleDateString()}` : ''}>
+          <EntryForm selectedDate={selectedDate} />
+        </Modal>
       </Stack>
     </Container>
   );
