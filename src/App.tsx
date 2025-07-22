@@ -12,6 +12,7 @@ import AuthCallback from './components/AuthCallback'
 import { signOut } from '../lib/auth'
 import EntryForm from "./components/EntryForm";
 import React from 'react';
+import HomePage from './components/HomePage';
 
 function AppContent() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -97,6 +98,7 @@ export default function App() {
         <MantineProvider>
           <Routes>
             <Route path="/auth/callback" element={<AuthCallback />} />
+            <Route path="/home" element={<HomePage />} />
             <Route path="*" element={<AppContent />} />
           </Routes>
         </MantineProvider>

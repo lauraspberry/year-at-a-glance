@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { TextInput, PasswordInput, Button, Stack, Text, Group, Paper } from '@mantine/core'
 import { signIn, signUp, signOut } from '../../lib/auth'
 import { useAuth } from '../../lib/AuthContext'
-import { GoogleLogin } from '@react-oauth/google';
+import { useGoogleAuth } from '../lib/GoogleAuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const Auth: React.FC = () => {
   const [email, setEmail] = useState('')
@@ -11,6 +12,14 @@ const Auth: React.FC = () => {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const { user } = useAuth()
+  const { isGoogleSignedIn, loginWithGoogle, googleError } = useGoogleAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isGoogleSignedIn) {
+      navigate('/home');
+    }
+  }, [isGoogleSignedIn, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -95,16 +104,12 @@ const Auth: React.FC = () => {
           </Button>
         </Group>
         <div style={{ textAlign: 'center', marginTop: 16 }}>
-          <GoogleLogin
-            onSuccess={credentialResponse => {
-              // For now, just log the response. Next step: use this to fetch calendar events.
-              console.log('Google credential response:', credentialResponse);
-            }}
-            onError={() => {
-              console.log('Google Login Failed');
-            }}
-            // scope="https://www.googleapis.com/auth/calendar.readonly"
-          />
+          {!isGoogleSignedIn && (
+            <Button onClick={loginWithGoogle} color="blue" variant="outline">
+              Sign in with Google
+            </Button>
+          )}
+          {googleError && <Text color="red">{googleError}</Text>}
         </div>
       </Stack>
     </form>
